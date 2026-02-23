@@ -9,7 +9,8 @@ public class PalindromeCheckerApp {
         System.out.print("Enter a string: ");
         String word = scanner.nextLine();
 
-        String processedWord = word.toLowerCase();
+        String processedWord = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+
         String reversed = new StringBuilder(processedWord).reverse().toString();
 
         if (processedWord.equals(reversed)) {
