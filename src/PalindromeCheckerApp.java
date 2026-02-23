@@ -1,24 +1,32 @@
-import java.util.Scanner;
+import java.util.Deque;
+import java.util.LinkedList;
 
 public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+        String word = "civic";
 
-        System.out.print("Enter a string: ");
-        String word = scanner.nextLine();
+        Deque<Character> deque = new LinkedList<>();
 
-        String processedWord = word.replaceAll("[^a-zA-Z0-9]", "").toLowerCase();
+        for (int i = 0; i < word.length(); i++) {
+            deque.add(word.charAt(i));
+        }
 
-        String reversed = new StringBuilder(processedWord).reverse().toString();
+        boolean isPalindrome = true;
 
-        if (processedWord.equals(reversed)) {
+        while (deque.size() > 1) {
+            if (!deque.removeFirst().equals(deque.removeLast())) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        if (isPalindrome) {
             System.out.println("The given string \"" + word + "\" is a Palindrome.");
         } else {
             System.out.println("The given string \"" + word + "\" is NOT a Palindrome.");
         }
 
-        scanner.close();
     }
 }
