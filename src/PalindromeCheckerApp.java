@@ -3,7 +3,7 @@ import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
-    // UC5 - Simple Recursion
+    // UC5 - Simple Recursion (Substring Based)
     public static boolean isPalindromeRecursive(String str) {
         if (str.length() <= 1)
             return true;
@@ -14,10 +14,8 @@ public class PalindromeCheckerApp {
         return isPalindromeRecursive(str.substring(1, str.length() - 1));
     }
 
-    // UC9 - Index Based Recursion (Call Stack Concept)
+    // UC9 - Index Based Recursion
     public static boolean isPalindromeRecursiveIndex(String str, int start, int end) {
-
-        // Base Condition
         if (start >= end)
             return true;
 
@@ -25,6 +23,26 @@ public class PalindromeCheckerApp {
             return false;
 
         return isPalindromeRecursiveIndex(str, start + 1, end - 1);
+    }
+
+    // UC10 - Case Insensitive & Space Ignored
+    public static boolean isPalindromeIgnoreCaseSpace(String input) {
+
+        // Normalize string using regex
+        String normalized = input.replaceAll("\\s+", "").toLowerCase();
+
+        int left = 0;
+        int right = normalized.length() - 1;
+
+        while (left < right) {
+            if (normalized.charAt(left) != normalized.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
     }
 
     public static void main(String[] args) {
@@ -38,7 +56,7 @@ public class PalindromeCheckerApp {
 
         System.out.println("\n----- Palindrome Results -----");
 
-        // UC1 - StringBuilder
+        // UC1 - StringBuilder Reverse
         String reversed1 = new StringBuilder(processed).reverse().toString();
         System.out.println("UC1 (StringBuilder Reverse): " + processed.equals(reversed1));
 
@@ -76,12 +94,16 @@ public class PalindromeCheckerApp {
         }
         System.out.println("UC4 (Stack Method): " + processed.equals(reversed4));
 
-        // UC5 - Simple Recursion
+        // UC5 - Recursion (Substring)
         System.out.println("UC5 (Recursion - Substring): " + isPalindromeRecursive(processed));
 
-        // UC9 - Recursive Index Based (Call Stack)
+        // UC9 - Recursion (Index Based)
         System.out.println("UC9 (Recursion - Index Based): " +
                 isPalindromeRecursiveIndex(processed, 0, processed.length() - 1));
+
+        // UC10 - Ignore Case & Spaces
+        System.out.println("UC10 (Ignore Case & Spaces): " +
+                isPalindromeIgnoreCaseSpace(input));
 
         scanner.close();
     }
