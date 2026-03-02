@@ -3,6 +3,7 @@ import java.util.Stack;
 
 public class PalindromeCheckerApp {
 
+    // UC5 - Simple Recursion
     public static boolean isPalindromeRecursive(String str) {
         if (str.length() <= 1)
             return true;
@@ -13,70 +14,17 @@ public class PalindromeCheckerApp {
         return isPalindromeRecursive(str.substring(1, str.length() - 1));
     }
 
-    static class Node {
-        char data;
-        Node next;
+    // UC9 - Index Based Recursion (Call Stack Concept)
+    public static boolean isPalindromeRecursiveIndex(String str, int start, int end) {
 
-        Node(char data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
-    public static Node createLinkedList(String str) {
-        Node head = null;
-        Node tail = null;
-
-        for (int i = 0; i < str.length(); i++) {
-            Node newNode = new Node(str.charAt(i));
-
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-        return head;
-    }
-
-    public static Node reverse(Node head) {
-        Node prev = null;
-        Node current = head;
-
-        while (current != null) {
-            Node next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-        }
-        return prev;
-    }
-
-    public static boolean isPalindromeLinkedList(Node head) {
-        if (head == null || head.next == null)
+        // Base Condition
+        if (start >= end)
             return true;
 
-        Node slow = head;
-        Node fast = head;
+        if (str.charAt(start) != str.charAt(end))
+            return false;
 
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        Node secondHalf = reverse(slow);
-        Node firstHalf = head;
-
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
-                return false;
-            }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
-        return true;
+        return isPalindromeRecursiveIndex(str, start + 1, end - 1);
     }
 
     public static void main(String[] args) {
@@ -90,15 +38,18 @@ public class PalindromeCheckerApp {
 
         System.out.println("\n----- Palindrome Results -----");
 
+        // UC1 - StringBuilder
         String reversed1 = new StringBuilder(processed).reverse().toString();
         System.out.println("UC1 (StringBuilder Reverse): " + processed.equals(reversed1));
 
+        // UC2 - Manual Loop
         String reversed2 = "";
         for (int i = processed.length() - 1; i >= 0; i--) {
             reversed2 += processed.charAt(i);
         }
         System.out.println("UC2 (Manual Loop): " + processed.equals(reversed2));
 
+        // UC3 - Two Pointer
         boolean isPalindrome3 = true;
         int left = 0;
         int right = processed.length() - 1;
@@ -113,6 +64,7 @@ public class PalindromeCheckerApp {
         }
         System.out.println("UC3 (Two Pointer): " + isPalindrome3);
 
+        // UC4 - Stack Method
         Stack<Character> stack = new Stack<>();
         for (int i = 0; i < processed.length(); i++) {
             stack.push(processed.charAt(i));
@@ -124,10 +76,12 @@ public class PalindromeCheckerApp {
         }
         System.out.println("UC4 (Stack Method): " + processed.equals(reversed4));
 
-        System.out.println("UC5 (Recursion): " + isPalindromeRecursive(processed));
+        // UC5 - Simple Recursion
+        System.out.println("UC5 (Recursion - Substring): " + isPalindromeRecursive(processed));
 
-        Node head = createLinkedList(processed);
-        System.out.println("UC8 (Linked List): " + isPalindromeLinkedList(head));
+        // UC9 - Recursive Index Based (Call Stack)
+        System.out.println("UC9 (Recursion - Index Based): " +
+                isPalindromeRecursiveIndex(processed, 0, processed.length() - 1));
 
         scanner.close();
     }
