@@ -1,19 +1,25 @@
 import java.util.*;
 
-// ======================
-// UC12 - Strategy Pattern
-// ======================
+public class PalindromeCheckerApp {
 
-// Strategy Interface
-interface PalindromeStrategy {
-    boolean check(String input);
-}
+    // Two Pointer Method
+    public static boolean twoPointer(String input) {
+        String processed = input.replaceAll("\\s+", "").toLowerCase();
+        int left = 0;
+        int right = processed.length() - 1;
 
-// Stack Strategy
-class StackStrategy implements PalindromeStrategy {
+        while (left < right) {
+            if (processed.charAt(left) != processed.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+        return true;
+    }
 
-    public boolean check(String input) {
-
+    // Stack Method
+    public static boolean stackMethod(String input) {
         String processed = input.replaceAll("\\s+", "").toLowerCase();
         Stack<Character> stack = new Stack<>();
 
@@ -28,79 +34,44 @@ class StackStrategy implements PalindromeStrategy {
 
         return processed.equals(reversed);
     }
-}
 
-// Deque Strategy
-class DequeStrategy implements PalindromeStrategy {
-
-    public boolean check(String input) {
-
+    // StringBuilder Reverse
+    public static boolean stringBuilderMethod(String input) {
         String processed = input.replaceAll("\\s+", "").toLowerCase();
-        Deque<Character> deque = new ArrayDeque<>();
-
-        for (char ch : processed.toCharArray()) {
-            deque.add(ch);
-        }
-
-        while (deque.size() > 1) {
-            if (!deque.pollFirst().equals(deque.pollLast())) {
-                return false;
-            }
-        }
-
-        return true;
+        String reversed = new StringBuilder(processed).reverse().toString();
+        return processed.equals(reversed);
     }
-}
-
-// Context Class
-class PalindromeContext {
-
-    private PalindromeStrategy strategy;
-
-    public PalindromeContext(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean executeStrategy(String input) {
-        return strategy.check(input);
-    }
-}
-
-// ======================
-// Main Application
-// ======================
-
-public class PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Choose Strategy:");
-        System.out.println("1. Stack Strategy");
-        System.out.println("2. Deque Strategy");
-        System.out.print("Enter choice: ");
-
-        int choice = scanner.nextInt();
-        scanner.nextLine(); // consume newline
-
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        PalindromeStrategy strategy;
+        System.out.println("\n----- UC13 Performance Comparison -----");
 
-        if (choice == 1) {
-            strategy = new StackStrategy();
-        } else {
-            strategy = new DequeStrategy();
-        }
+        // Two Pointer Timing
+        long start1 = System.nanoTime();
+        boolean result1 = twoPointer(input);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
 
-        PalindromeContext context = new PalindromeContext(strategy);
+        // Stack Timing
+        long start2 = System.nanoTime();
+        boolean result2 = stackMethod(input);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
 
-        boolean result = context.executeStrategy(input);
+        // StringBuilder Timing
+        long start3 = System.nanoTime();
+        boolean result3 = stringBuilderMethod(input);
+        long end3 = System.nanoTime();
+        long time3 = end3 - start3;
 
-        System.out.println("\n----- UC12 Result -----");
-        System.out.println("Is Palindrome: " + result);
+        System.out.println("Two Pointer Result: " + result1 + " | Time: " + time1 + " ns");
+        System.out.println("Stack Method Result: " + result2 + " | Time: " + time2 + " ns");
+        System.out.println("StringBuilder Result: " + result3 + " | Time: " + time3 + " ns");
 
         scanner.close();
     }
