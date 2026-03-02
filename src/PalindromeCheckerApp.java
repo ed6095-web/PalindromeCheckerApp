@@ -1,9 +1,33 @@
 import java.util.Scanner;
 import java.util.Stack;
 
+// UC11 - Object Oriented Service Class
+class PalindromeChecker {
+
+    // Encapsulated palindrome logic
+    public boolean checkPalindrome(String input) {
+
+        // Normalize string (Ignore case & spaces)
+        String processed = input.replaceAll("\\s+", "").toLowerCase();
+
+        int left = 0;
+        int right = processed.length() - 1;
+
+        while (left < right) {
+            if (processed.charAt(left) != processed.charAt(right)) {
+                return false;
+            }
+            left++;
+            right--;
+        }
+
+        return true;
+    }
+}
+
 public class PalindromeCheckerApp {
 
-    // UC5 - Simple Recursion (Substring Based)
+    // UC5 - Recursion (Substring)
     public static boolean isPalindromeRecursive(String str) {
         if (str.length() <= 1)
             return true;
@@ -25,26 +49,6 @@ public class PalindromeCheckerApp {
         return isPalindromeRecursiveIndex(str, start + 1, end - 1);
     }
 
-    // UC10 - Case Insensitive & Space Ignored
-    public static boolean isPalindromeIgnoreCaseSpace(String input) {
-
-        // Normalize string using regex
-        String normalized = input.replaceAll("\\s+", "").toLowerCase();
-
-        int left = 0;
-        int right = normalized.length() - 1;
-
-        while (left < right) {
-            if (normalized.charAt(left) != normalized.charAt(right)) {
-                return false;
-            }
-            left++;
-            right--;
-        }
-
-        return true;
-    }
-
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
@@ -56,7 +60,7 @@ public class PalindromeCheckerApp {
 
         System.out.println("\n----- Palindrome Results -----");
 
-        // UC1 - StringBuilder Reverse
+        // UC1 - StringBuilder
         String reversed1 = new StringBuilder(processed).reverse().toString();
         System.out.println("UC1 (StringBuilder Reverse): " + processed.equals(reversed1));
 
@@ -103,7 +107,12 @@ public class PalindromeCheckerApp {
 
         // UC10 - Ignore Case & Spaces
         System.out.println("UC10 (Ignore Case & Spaces): " +
-                isPalindromeIgnoreCaseSpace(input));
+                new PalindromeChecker().checkPalindrome(input));
+
+        // UC11 - Object Oriented Service
+        PalindromeChecker checker = new PalindromeChecker();
+        boolean result = checker.checkPalindrome(input);
+        System.out.println("UC11 (OOP Service Class): " + result);
 
         scanner.close();
     }
